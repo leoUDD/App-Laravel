@@ -5,7 +5,11 @@ use App\Http\Controllers\Autenticacion\RegistroController;
 use App\Http\Controllers\MascotaController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/mascotas');
+Route::get('/', function () {
+    return auth()->check()
+        ? redirect()->route('mascotas.index')
+        : view('autenticacion.bienvenida');
+})->name('bienvenida');
 
 /*
 |--------------------------------------------------------------------------

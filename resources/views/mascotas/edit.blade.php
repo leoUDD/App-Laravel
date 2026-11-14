@@ -3,23 +3,23 @@
 @section('titulo', "Editar a {$mascota->nombre}")
 
 @section('contenido')
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <h1 class="h4 mb-4">Editar a {{ $mascota->nombre }}</h1>
-
-                    <form method="POST" action="{{ route('mascotas.update', $mascota) }}" novalidate>
-                        @method('PUT')
-                        @include('mascotas._formulario')
-
-                        <div class="d-flex gap-2 justify-content-end">
-                            <a href="{{ route('mascotas.show', $mascota) }}" class="btn btn-outline-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-petcare">Guardar cambios</button>
-                        </div>
-                    </form>
-                </div>
+    <div class="pc-pagina">
+        <header class="pc-encabezado pc-encabezado--formulario">
+            <a href="{{ route('mascotas.show', $mascota) }}" class="pc-boton-icono" aria-label="Volver al perfil de {{ $mascota->nombre }}">
+                <x-icono nombre="volver" :tamano="20" :grosor="2.2" />
+            </a>
+            <div class="pc-encabezado__texto">
+                <h1>Editar a {{ $mascota->nombre }}</h1>
+                <p class="pc-encabezado__descripcion">Mantén sus datos al día para recibir mejores respuestas</p>
             </div>
-        </div>
+        </header>
+
+        <form method="POST" action="{{ route('mascotas.update', $mascota) }}" class="pc-formulario" novalidate>
+            @method('PUT')
+            @include('mascotas._formulario')
+
+            <button type="submit" class="pc-boton pc-boton--primario">Guardar cambios</button>
+            <a href="{{ route('mascotas.show', $mascota) }}" class="pc-boton pc-boton--secundario">Cancelar</a>
+        </form>
     </div>
 @endsection

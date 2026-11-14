@@ -3,46 +3,51 @@
 @section('titulo', 'Iniciar sesión')
 
 @section('contenido')
-    <div class="card tarjeta-autenticacion mx-auto shadow-sm border-0">
-        <div class="card-body p-4">
-            <div class="text-center mb-4">
-                <div class="icono-mascota">🐾</div>
-                <h1 class="h4 mt-2 mb-1">Iniciar sesión</h1>
-                <p class="text-muted small mb-0">Resuelve tus dudas sobre el cuidado de tu perro o gato.</p>
+    <div class="pc-autenticacion">
+        <x-marca />
+
+        <header class="pc-encabezado pc-encabezado--formulario">
+            <div class="pc-encabezado__texto">
+                <h1>Iniciar sesión</h1>
+                <p class="pc-encabezado__descripcion">Resuelve tus dudas sobre el cuidado de tu perro o gato.</p>
+            </div>
+        </header>
+
+        <form method="POST" action="{{ route('login') }}" class="pc-formulario" novalidate>
+            @csrf
+
+            <div class="pc-campo">
+                <label for="email" class="pc-campo__etiqueta">Correo electrónico</label>
+                <input type="email" id="email" name="email" value="{{ old('email') }}"
+                       class="pc-campo__entrada @error('email') pc-campo__entrada--invalida @enderror"
+                       placeholder="tucorreo@ejemplo.com" required autofocus autocomplete="email"
+                       @error('email') aria-invalid="true" aria-describedby="email-error" @enderror>
+                @error('email')
+                    <p id="email-error" class="pc-campo__error">{{ $message }}</p>
+                @enderror
             </div>
 
-            <form method="POST" action="{{ route('login') }}" novalidate>
-                @csrf
+            <div class="pc-campo">
+                <label for="password" class="pc-campo__etiqueta">Contraseña</label>
+                <input type="password" id="password" name="password"
+                       class="pc-campo__entrada @error('password') pc-campo__entrada--invalida @enderror"
+                       required autocomplete="current-password"
+                       @error('password') aria-invalid="true" aria-describedby="password-error" @enderror>
+                @error('password')
+                    <p id="password-error" class="pc-campo__error">{{ $message }}</p>
+                @enderror
+            </div>
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Correo electrónico</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}"
-                           class="form-control @error('email') is-invalid @enderror" required autofocus autocomplete="email">
-                    @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+            <label class="pc-casilla">
+                <input type="checkbox" name="recordarme" value="1" @checked(old('recordarme'))>
+                Mantener la sesión iniciada
+            </label>
 
-                <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" id="password" name="password"
-                           class="form-control @error('password') is-invalid @enderror" required autocomplete="current-password">
-                    @error('password')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+            <button type="submit" class="pc-boton pc-boton--primario">Ingresar</button>
+        </form>
 
-                <div class="form-check mb-3">
-                    <input type="checkbox" id="recordarme" name="recordarme" value="1" class="form-check-input">
-                    <label for="recordarme" class="form-check-label">Mantener la sesión iniciada</label>
-                </div>
-
-                <button type="submit" class="btn btn-petcare w-100">Ingresar</button>
-            </form>
-
-            <p class="text-center small mt-3 mb-0">
-                ¿No tienes cuenta? <a href="{{ route('registro') }}">Regístrate</a>
-            </p>
-        </div>
+        <p class="pc-autenticacion__pie">
+            ¿No tienes cuenta? <a href="{{ route('registro') }}">Crear cuenta</a>
+        </p>
     </div>
 @endsection

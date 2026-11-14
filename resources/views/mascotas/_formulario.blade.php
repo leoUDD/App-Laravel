@@ -1,56 +1,80 @@
 @csrf
 
-<div class="mb-3">
-    <label for="nombre" class="form-label">Nombre</label>
+@php
+    $especieElegida = old('especie', $mascota->especie ?? 'perro');
+@endphp
+
+<div class="pc-avatar-formulario" aria-hidden="true">
+    <div class="pc-avatar-formulario__marco">
+        <x-ilustracion especie="perro" :tamano="78" class="pc-avatar-formulario__perro" />
+        <x-ilustracion especie="gato" :tamano="74" class="pc-avatar-formulario__gato" />
+    </div>
+</div>
+
+<div class="pc-campo">
+    <label for="nombre" class="pc-campo__etiqueta">Nombre</label>
     <input type="text" id="nombre" name="nombre" value="{{ old('nombre', $mascota->nombre) }}"
-           class="form-control @error('nombre') is-invalid @enderror" required maxlength="60" autofocus>
+           class="pc-campo__entrada @error('nombre') pc-campo__entrada--invalida @enderror"
+           placeholder="Ej: Rocco" required maxlength="60" autofocus
+           @error('nombre') aria-invalid="true" aria-describedby="nombre-error" @enderror>
     @error('nombre')
-        <div class="invalid-feedback">{{ $message }}</div>
+        <p id="nombre-error" class="pc-campo__error">{{ $message }}</p>
     @enderror
 </div>
 
-<div class="mb-3">
-    <span class="form-label d-block">Especie</span>
-    @foreach (\App\Models\Mascota::ESPECIES as $valor => $texto)
-        <div class="form-check form-check-inline">
-            <input type="radio" id="especie_{{ $valor }}" name="especie" value="{{ $valor }}"
-                   class="form-check-input @error('especie') is-invalid @enderror"
-                   @checked(old('especie', $mascota->especie) === $valor) required>
-            <label for="especie_{{ $valor }}" class="form-check-label">{{ $texto }}</label>
-        </div>
-    @endforeach
+<fieldset class="pc-campo m-0 p-0 border-0">
+    <legend class="pc-campo__etiqueta mb-0 float-none">Especie</legend>
+    <div class="pc-especies">
+        @foreach (\App\Models\Mascota::ESPECIES as $valor => $texto)
+            <label class="pc-especie">
+                <input type="radio" name="especie" value="{{ $valor }}" @checked($especieElegida === $valor) required>
+                <span><x-icono nombre="check" :tamano="18" :grosor="2.4" />{{ $texto }}</span>
+            </label>
+        @endforeach
+    </div>
     @error('especie')
-        <div class="invalid-feedback d-block">{{ $message }}</div>
+        <p class="pc-campo__error">{{ $message }}</p>
     @enderror
-</div>
+</fieldset>
 
-<div class="mb-3">
-    <label for="raza" class="form-label">Raza</label>
+<div class="pc-campo">
+    <label for="raza" class="pc-campo__etiqueta">Raza</label>
     <input type="text" id="raza" name="raza" value="{{ old('raza', $mascota->raza) }}"
-           class="form-control @error('raza') is-invalid @enderror" required maxlength="60" placeholder="Ej: Labrador, Siamés o Mestizo">
+           class="pc-campo__entrada @error('raza') pc-campo__entrada--invalida @enderror"
+           placeholder="Ej: Border Collie o Mestizo" required maxlength="60"
+           @error('raza') aria-invalid="true" aria-describedby="raza-error" @enderror>
     @error('raza')
-        <div class="invalid-feedback">{{ $message }}</div>
+        <p id="raza-error" class="pc-campo__error">{{ $message }}</p>
     @enderror
 </div>
 
-<div class="row">
-    <div class="col-sm-6 mb-3">
-        <label for="edad" class="form-label">Edad (años)</label>
+<div class="pc-campo-doble">
+    <div class="pc-campo">
+        <label for="edad" class="pc-campo__etiqueta">Edad (años)</label>
         <input type="number" id="edad" name="edad" value="{{ old('edad', $mascota->edad) }}"
-               class="form-control @error('edad') is-invalid @enderror" required min="0" max="30" step="1">
+               class="pc-campo__entrada @error('edad') pc-campo__entrada--invalida @enderror"
+               placeholder="Ej: 2" required min="0" max="30" step="1" aria-describedby="edad-ayuda"
+               @error('edad') aria-invalid="true" @enderror>
         @error('edad')
-            <div class="invalid-feedback">{{ $message }}</div>
+            <p id="edad-ayuda" class="pc-campo__error">{{ $message }}</p>
         @else
-            <div class="form-text">Usa 0 si tiene menos de un año.</div>
+            <p id="edad-ayuda" class="pc-campo__ayuda">Usa 0 si tiene menos de un año.</p>
         @enderror
     </div>
 
-    <div class="col-sm-6 mb-3">
-        <label for="peso" class="form-label">Peso (kg)</label>
+    <div class="pc-campo">
+        <label for="peso" class="pc-campo__etiqueta">Peso (kg)</label>
         <input type="number" id="peso" name="peso" value="{{ old('peso', $mascota->peso) }}"
-               class="form-control @error('peso') is-invalid @enderror" required min="0.1" max="150" step="0.01">
+               class="pc-campo__entrada @error('peso') pc-campo__entrada--invalida @enderror"
+               placeholder="Ej: 14,5" required min="0.1" max="150" step="0.01"
+               @error('peso') aria-invalid="true" aria-describedby="peso-error" @enderror>
         @error('peso')
-            <div class="invalid-feedback">{{ $message }}</div>
+            <p id="peso-error" class="pc-campo__error">{{ $message }}</p>
         @enderror
     </div>
+</div>
+
+<div class="pc-nota">
+    <x-icono nombre="chispa" :tamano="18" />
+    <p>Con la raza, edad y peso, PetCare AI ajusta porciones, rutinas y alertas a tu mascota.</p>
 </div>

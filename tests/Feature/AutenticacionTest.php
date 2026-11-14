@@ -10,10 +10,22 @@ class AutenticacionTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_la_raiz_redirige_al_login_si_no_hay_sesion(): void
+    public function test_la_raiz_muestra_la_bienvenida_si_no_hay_sesion(): void
     {
-        $this->get('/')->assertRedirect('/mascotas');
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('El bienestar de tu mascota comienza aquí')
+            ->assertSee(route('login'))
+            ->assertSee(route('registro'));
+
         $this->get('/mascotas')->assertRedirect(route('login'));
+    }
+
+    public function test_la_raiz_redirige_a_mis_mascotas_si_hay_sesion(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->get('/')
+            ->assertRedirect(route('mascotas.index'));
     }
 
     public function test_muestra_los_formularios_de_registro_y_login(): void

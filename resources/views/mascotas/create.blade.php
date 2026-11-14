@@ -3,22 +3,21 @@
 @section('titulo', 'Registrar mascota')
 
 @section('contenido')
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    <h1 class="h4 mb-4">Registrar mascota</h1>
-
-                    <form method="POST" action="{{ route('mascotas.store') }}" novalidate>
-                        @include('mascotas._formulario')
-
-                        <div class="d-flex gap-2 justify-content-end">
-                            <a href="{{ route('mascotas.index') }}" class="btn btn-outline-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-petcare">Guardar</button>
-                        </div>
-                    </form>
-                </div>
+    <div class="pc-pagina">
+        <header class="pc-encabezado pc-encabezado--formulario">
+            <a href="{{ route('mascotas.index') }}" class="pc-boton-icono" aria-label="Volver a mis mascotas">
+                <x-icono nombre="volver" :tamano="20" :grosor="2.2" />
+            </a>
+            <div class="pc-encabezado__texto">
+                <h1>Registrar mascota</h1>
+                <p class="pc-encabezado__descripcion">PetCare AI usará estos datos para personalizar sus respuestas</p>
             </div>
-        </div>
+        </header>
+
+        <form method="POST" action="{{ route('mascotas.store') }}" class="pc-formulario" novalidate>
+            @include('mascotas._formulario')
+
+            <button type="submit" class="pc-boton pc-boton--primario">Guardar perfil</button>
+        </form>
     </div>
 @endsection
