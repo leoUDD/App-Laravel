@@ -7,6 +7,7 @@ use App\Models\Mascota;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class MascotaController extends Controller
@@ -34,7 +35,13 @@ class MascotaController extends Controller
      */
     public function store(MascotaRequest $request): RedirectResponse
     {
-        $mascota = $request->user()->mascotas()->create($request->validated());
+        $datos = $request->safe()->except(['foto', 'quitar_foto']);
+
+        if ($request->hasFile('foto')) {
+            $datos['foto'] = $request->file('foto')->store('mascotas', 'public');
+        }
+
+        $mascota = $request->user()->mascotas()->create($datos);
 
         return redirect()->route('mascotas.show', $mascota)
             ->with('exito', "{$mascota->nombre} fue registrado/a correctamente.");
@@ -67,7 +74,20 @@ class MascotaController extends Controller
     {
         Gate::authorize('update', $mascota);
 
-        $mascota->update($request->validated());
+        $datos = $request->safe()->except(['foto', 'quitar_foto']);
+        $fotoAnterior = $mascota->foto;
+
+        if ($request->hasFile('foto')) {
+            $datos['foto'] = $request->file('foto')->store('mascotas', 'public');
+        } elseif ($request->boolean('quitar_foto')) {
+            $datos['foto'] = null;
+        }
+
+        $mascota->update($datos);
+
+        if ($fotoAnterior && $fotoAnterior !== $mascota->foto) {
+            Storage::disk('public')->delete($fotoAnterior);
+        }
 
         return redirect()->route('mascotas.show', $mascota)
             ->with('exito', 'Los datos de la mascota se actualizaron correctamente.');
@@ -81,6 +101,10 @@ class MascotaController extends Controller
         Gate::authorize('delete', $mascota);
 
         $mascota->delete();
+
+        if ($mascota->foto) {
+            Storage::disk('public')->delete($mascota->foto);
+        }
 
         return redirect()->route('mascotas.index')
             ->with('exito', "{$mascota->nombre} fue eliminado/a.");

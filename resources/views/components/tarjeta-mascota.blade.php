@@ -17,7 +17,11 @@
         <div class="pc-mascota">
     @endif
         <span class="pc-mascota__foto pc-mascota__foto--{{ $mascota->especie }}">
-            <x-ilustracion :especie="$mascota->especie" :tamano="54" />
+            @if ($mascota->urlFoto())
+                <img src="{{ $mascota->urlFoto() }}" alt="Foto de {{ $mascota->nombre }}" class="pc-mascota__imagen">
+            @else
+                <x-ilustracion :especie="$mascota->especie" :tamano="54" />
+            @endif
         </span>
         <span class="pc-mascota__datos">
             <span class="pc-mascota__nombre">

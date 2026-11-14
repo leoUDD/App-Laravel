@@ -51,6 +51,7 @@ cp .env.example .env
 php artisan key:generate
 # Configurar credenciales de PostgreSQL y GROQ_API_KEY en .env
 php artisan migrate
+php artisan storage:link   # para que se vean las fotos de las mascotas
 php artisan serve
 ```
 

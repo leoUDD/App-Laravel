@@ -14,7 +14,7 @@
             </div>
         </header>
 
-        <form method="POST" action="{{ route('mascotas.update', $mascota) }}" class="pc-formulario" novalidate>
+        <form method="POST" action="{{ route('mascotas.update', $mascota) }}" class="pc-formulario" enctype="multipart/form-data" novalidate>
             @method('PUT')
             @include('mascotas._formulario')
 

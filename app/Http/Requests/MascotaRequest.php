@@ -30,6 +30,23 @@ class MascotaRequest extends FormRequest
             'raza' => ['required', 'string', 'max:60'],
             'edad' => ['required', 'integer', 'between:0,30'],
             'peso' => ['required', 'numeric', 'between:0.1,150', 'decimal:0,2'],
+            'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'quitar_foto' => ['nullable', 'boolean'],
+        ];
+    }
+
+    /**
+     * Mensajes de error personalizados.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'foto.image' => 'La foto debe ser una imagen.',
+            'foto.mimes' => 'La foto debe ser JPG, PNG o WEBP.',
+            'foto.max' => 'La foto no puede pesar más de 4 MB.',
+            'foto.uploaded' => 'No se pudo subir la foto. Prueba con una imagen de menos de 4 MB.',
         ];
     }
 }

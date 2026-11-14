@@ -581,8 +581,11 @@
 /* Avatar del formulario: cambia según la especie elegida */
 .pc-avatar-formulario {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
     padding: 6px 0 2px;
+    text-align: center;
 }
 
 .pc-avatar-formulario__marco {
@@ -592,9 +595,74 @@
     justify-content: center;
     width: 112px;
     height: 112px;
+    margin-bottom: 6px;
     border-radius: 36px;
     border: 2px dashed var(--pc-menta-medio);
     background: var(--pc-menta-suave);
+    cursor: pointer;
+}
+
+.pc-avatar-formulario__imagen {
+    display: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 34px;
+    object-fit: cover;
+}
+
+.pc-avatar-formulario__marco--con-foto {
+    border-style: solid;
+}
+
+.pc-avatar-formulario__marco--con-foto .pc-avatar-formulario__imagen {
+    display: block;
+}
+
+.pc-formulario .pc-avatar-formulario__marco--con-foto .pc-avatar-formulario__perro,
+.pc-formulario .pc-avatar-formulario__marco--con-foto .pc-avatar-formulario__gato {
+    display: none;
+}
+
+.pc-avatar-formulario__camara {
+    position: absolute;
+    right: -6px;
+    bottom: -6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: 3px solid var(--pc-crema);
+    background: var(--pc-verde-oscuro);
+    color: var(--pc-menta);
+}
+
+.pc-avatar-formulario__boton {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--pc-verde);
+    cursor: pointer;
+}
+
+.pc-avatar-formulario__boton:hover {
+    color: var(--pc-verde-oscuro);
+    text-decoration: underline;
+}
+
+.pc-avatar-formulario input[type="file"]:focus-visible + .pc-avatar-formulario__boton {
+    border-radius: 10px;
+    outline: 2px solid var(--pc-menta-medio);
+    outline-offset: 1px;
+}
+
+.pc-avatar-formulario__quitar {
+    min-height: 36px;
+    font-size: 13px;
 }
 
 .pc-avatar-formulario__gato {
@@ -664,6 +732,16 @@
     width: 64px;
     height: 64px;
     border-radius: 20px;
+}
+
+.pc-mascota__foto {
+    overflow: hidden;
+}
+
+.pc-mascota__imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .pc-mascota__foto--perro {

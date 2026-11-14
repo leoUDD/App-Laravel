@@ -14,7 +14,7 @@
             </div>
         </header>
 
-        <form method="POST" action="{{ route('mascotas.store') }}" class="pc-formulario" novalidate>
+        <form method="POST" action="{{ route('mascotas.store') }}" class="pc-formulario" enctype="multipart/form-data" novalidate>
             @include('mascotas._formulario')
 
             <button type="submit" class="pc-boton pc-boton--primario">Guardar perfil</button>

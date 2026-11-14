@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
-#[Fillable(['nombre', 'especie', 'raza', 'edad', 'peso'])]
+#[Fillable(['nombre', 'especie', 'raza', 'edad', 'peso', 'foto'])]
 class Mascota extends Model
 {
     /** @use HasFactory<MascotaFactory> */
@@ -53,6 +54,14 @@ class Mascota extends Model
     public function especieTexto(): string
     {
         return self::ESPECIES[$this->especie] ?? ucfirst($this->especie);
+    }
+
+    /**
+     * URL pública de la foto, o null si la mascota no tiene foto.
+     */
+    public function urlFoto(): ?string
+    {
+        return $this->foto ? Storage::disk('public')->url($this->foto) : null;
     }
 
     /**
