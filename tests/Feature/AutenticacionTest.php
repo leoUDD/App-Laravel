@@ -34,6 +34,32 @@ class AutenticacionTest extends TestCase
         $this->get(route('login'))->assertOk()->assertSee('Iniciar sesión');
     }
 
+    public function test_usa_la_url_publica_en_los_enlaces_y_redirecciones_de_desarrollo(): void
+    {
+        $publica = 'https://petcare-8000.app.github.dev';
+        $interna = 'http://localhost:8000';
+
+        $this->app->instance('env', 'local');
+        config(['app.url' => $publica]);
+
+        $this->get($interna.'/')->assertOk()
+            ->assertSee('href="'.$publica.'/login"', false)
+            ->assertSee('href="'.$publica.'/registro"', false);
+
+        $this->get($interna.'/login')->assertOk()->assertSee('action="'.$publica.'/login"', false);
+        $this->get($interna.'/registro')->assertOk()->assertSee('action="'.$publica.'/registro"', false);
+        $this->get($interna.'/mascotas')->assertRedirect($publica.'/login');
+
+        $this->assertSame($publica.'/mascotas', session('url.intended'));
+
+        $usuario = User::factory()->create();
+        $this->withHeader('Sec-Fetch-Site', 'same-origin')
+            ->post($interna.'/login', ['email' => $usuario->email, 'password' => 'password'])
+            ->assertRedirect($publica.'/mascotas');
+
+        $this->assertAuthenticatedAs($usuario);
+    }
+
     public function test_un_usuario_puede_registrarse(): void
     {
         $response = $this->post(route('registro'), [

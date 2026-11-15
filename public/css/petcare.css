@@ -1069,3 +1069,201 @@
     opacity: 0.45;
     cursor: default;
 }
+
+/* ---------- Consultas e historial ---------- */
+
+.pc-consulta-encabezado {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 16px;
+    border-radius: 22px;
+    background: var(--pc-verde-oscuro);
+    color: var(--pc-blanco);
+    overflow-wrap: anywhere;
+}
+
+.pc-consulta-encabezado__icono,
+.pc-consulta-item__icono {
+    display: grid;
+    flex: 0 0 40px;
+    height: 40px;
+    place-items: center;
+    border-radius: 14px;
+    background: var(--pc-menta-suave);
+    color: var(--pc-verde);
+}
+
+.pc-consulta-encabezado h1,
+.pc-consulta-encabezado p {
+    margin: 0;
+}
+
+.pc-consulta-encabezado h1 { font-size: 20px; }
+.pc-consulta-encabezado p { font-size: 12px; color: var(--pc-menta-texto); }
+
+.pc-consulta-mascotas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 158px), 1fr));
+    gap: 8px;
+}
+
+.pc-consulta-mascota {
+    position: relative;
+    min-width: 0;
+}
+
+.pc-consulta-mascota input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.pc-consulta-mascota > span {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border: 1px solid var(--pc-borde);
+    border-radius: 14px;
+    background: var(--pc-blanco);
+    font-size: 13px;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+}
+
+.pc-consulta-mascota svg { flex-shrink: 0; color: var(--pc-verde); }
+.pc-consulta-mascota small { display: block; color: var(--pc-texto-secundario); }
+
+.pc-consulta-mascota input:checked + span {
+    border-color: var(--pc-verde);
+    background: var(--pc-menta-suave);
+}
+
+.pc-consulta-mascota input:focus-visible + span {
+    outline: 2px solid var(--pc-verde);
+    outline-offset: 2px;
+}
+
+.pc-consulta-pregunta {
+    height: auto;
+    min-height: 96px;
+    padding: 12px 16px;
+    resize: vertical;
+}
+
+.pc-consulta-burbuja {
+    gap: 6px;
+    overflow-wrap: anywhere;
+    font-size: 14px;
+}
+
+.pc-consulta-burbuja h2,
+.pc-consulta-burbuja p {
+    margin: 0;
+}
+
+.pc-consulta-burbuja h2 { font-size: 16px; }
+.pc-consulta-burbuja p { white-space: pre-wrap; }
+
+.pc-consulta-burbuja--pregunta {
+    align-self: flex-end;
+    max-width: 90%;
+    padding: 12px 16px;
+    border-radius: 18px 18px 4px 18px;
+    background: var(--pc-verde-oscuro);
+    color: var(--pc-blanco);
+}
+
+.pc-consulta-burbuja time {
+    display: block;
+    margin-top: 4px;
+    color: var(--pc-menta-texto);
+    font-size: 11px;
+    text-align: right;
+}
+
+.pc-consulta-alerta {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    border: 1px solid var(--pc-menta-medio);
+    border-radius: 18px;
+    background: var(--pc-blanco);
+    color: var(--pc-verde-oscuro);
+}
+
+.pc-consulta-alerta--alta {
+    border-color: #F2B8A0;
+    background: var(--pc-peligro-suave);
+    color: var(--pc-peligro-oscuro);
+}
+
+.pc-consulta-alerta svg { flex-shrink: 0; }
+.pc-consulta-alerta h2 { margin: 0 0 4px; font-size: 16px; }
+.pc-consulta-alerta p { margin: 0; font-size: 14px; }
+
+.pc-consulta-buscador,
+.pc-consulta-paginacion {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pc-consulta-buscador input { min-width: 0; }
+.pc-consulta-paginacion { justify-content: center; flex-wrap: wrap; }
+
+.pc-consulta-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pc-consulta-filtros a {
+    max-width: 100%;
+    padding: 6px 12px;
+    border: 1px solid var(--pc-borde);
+    border-radius: 999px;
+    background: var(--pc-blanco);
+    font-size: 13px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+}
+
+.pc-consulta-filtros a[aria-current] {
+    border-color: var(--pc-verde-oscuro);
+    background: var(--pc-verde-oscuro);
+    color: var(--pc-blanco);
+}
+
+.pc-consulta-lista {
+    display: grid;
+    gap: 10px;
+}
+
+.pc-app a.pc-consulta-item {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    color: var(--pc-texto);
+    text-decoration: none;
+}
+
+.pc-consulta-item > svg { flex-shrink: 0; }
+.pc-consulta-item__texto { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.pc-consulta-item__texto small { display: block; color: var(--pc-texto-secundario); }
+.pc-etiqueta.pc-consulta-riesgo { margin-top: 5px; background: var(--pc-peligro-suave); color: var(--pc-peligro-oscuro); }
+
+.pc-repregunta[open] > summary {
+    display: none;
+}
+
+.pc-bitacora-nota {
+    margin: 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}

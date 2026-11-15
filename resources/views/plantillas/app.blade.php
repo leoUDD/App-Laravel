@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('css/petcare.css') }}">
+    <link rel="stylesheet" href="{{ request()->getBasePath() }}/css/petcare.css">
 </head>
 <body class="pc-cuerpo">
     <div class="pc-app @auth pc-app--con-navegacion @endauth">

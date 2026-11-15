@@ -7,7 +7,8 @@
 
 @php
     $edad = $mascota->edad.' '.($mascota->edad === 1 ? 'año' : 'años');
-    $peso = Number::format((float) $mascota->peso, maxPrecision: 2, locale: 'es').' kg';
+    $pesoDecimal = number_format((float) $mascota->peso, 2, ',', '');
+    $peso = rtrim(rtrim($pesoDecimal, '0'), ',').' kg';
 @endphp
 
 <article {{ $attributes->merge(['class' => 'pc-tarjeta']) }} aria-label="{{ $mascota->nombre }}">

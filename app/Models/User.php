@@ -40,4 +40,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Mascota::class);
     }
+
+    /**
+     * @return HasMany<Consulta, $this>
+     */
+    public function consultas(): HasMany
+    {
+        return $this->hasMany(Consulta::class);
+    }
 }

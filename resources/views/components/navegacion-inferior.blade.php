@@ -6,7 +6,7 @@
 @php
     $secciones = [
         ['ruta' => 'mascotas.index', 'activa' => 'mascotas.*', 'texto' => 'Mis mascotas', 'icono' => 'huella-contorno'],
-        ['ruta' => 'consultas.create', 'activa' => 'consultas.create', 'texto' => 'Asistente', 'icono' => 'chispas', 'asistente' => true],
+        ['ruta' => 'consultas.create', 'activa' => ['consultas.create', 'consultas.show'], 'texto' => 'Asistente', 'icono' => 'chispas', 'asistente' => true],
         ['ruta' => 'consultas.index', 'activa' => 'consultas.index', 'texto' => 'Historial', 'icono' => 'reloj'],
     ];
 @endphp
@@ -15,7 +15,7 @@
     @foreach ($secciones as $seccion)
         @php
             $existe = Route::has($seccion['ruta']);
-            $activa = $existe && request()->routeIs($seccion['activa']);
+            $activa = $existe && request()->routeIs(...(array) $seccion['activa']);
             $clases = 'pc-navegacion__item'
                 .($activa ? ' pc-navegacion__item--activo' : '')
                 .(! empty($seccion['asistente']) ? ' pc-navegacion__item--asistente' : '');

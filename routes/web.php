@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Autenticacion\LoginController;
 use App\Http\Controllers\Autenticacion\RegistroController;
+use App\Http\Controllers\BitacoraController;
+use App\Http\Controllers\ConsultaController;
 use App\Http\Controllers\MascotaController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,6 +37,11 @@ Route::post('/logout', [LoginController::class, 'destroy'])
 */
 Route::middleware('auth')->group(function () {
     Route::resource('mascotas', MascotaController::class);
+    Route::resource('mascotas.bitacora', BitacoraController::class)
+        ->parameters(['bitacora' => 'entrada'])
+        ->scoped(['entrada' => 'id'])
+        ->where(['mascota' => '[0-9]+', 'entrada' => '[0-9]+'])
+        ->only(['index', 'store', 'edit', 'update', 'destroy']);
 });
 
 /*
@@ -42,3 +49,11 @@ Route::middleware('auth')->group(function () {
 | Consultas a la IA e historial (Sebastián)
 |--------------------------------------------------------------------------
 */
+Route::middleware('auth')->group(function () {
+    Route::get('/consultas', [ConsultaController::class, 'index'])->name('consultas.index');
+    Route::get('/consultas/crear', [ConsultaController::class, 'create'])->name('consultas.create');
+    Route::post('/consultas', [ConsultaController::class, 'store'])->name('consultas.store');
+    Route::patch('/consultas/{consulta}/favorita', [ConsultaController::class, 'favorita'])
+        ->whereNumber('consulta')->name('consultas.favorita');
+    Route::get('/consultas/{consulta}', [ConsultaController::class, 'show'])->whereNumber('consulta')->name('consultas.show');
+});

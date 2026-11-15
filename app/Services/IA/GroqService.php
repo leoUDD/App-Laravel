@@ -25,6 +25,7 @@ class GroqService
         Reglas:
         - Responde siempre en español, con un tono cercano, claro y práctico. Usa párrafos cortos o listas breves (máximo unas 200 palabras).
         - Usa los datos de la mascota (especie, raza, edad y peso) para personalizar la respuesta cuando sean relevantes.
+        - Si hay mensajes anteriores, úsalos para interpretar la última pregunta.
         - Entregas orientación general: no diagnosticas enfermedades, no recetas medicamentos ni indicas dosis, y no reemplazas a un médico veterinario.
         - Si la consulta menciona alimentos o sustancias potencialmente tóxicos (por ejemplo chocolate, uvas o pasas, cebolla, ajo, xilitol, alcohol, cafeína, medicamentos humanos, productos de limpieza, venenos o ciertas plantas), explica el riesgo con prudencia y recomienda contactar de inmediato a un veterinario.
         - Si hay señales de urgencia (dificultad para respirar, convulsiones, vómitos o diarrea con sangre, decaimiento marcado, dolor intenso, traumatismos, sospecha de intoxicación), indica que debe acudir de inmediato a un veterinario.
@@ -42,9 +43,11 @@ class GroqService
     /**
      * Envía una consulta a la IA, con los datos de la mascota como contexto si se indica.
      *
+     * @param  list<array{pregunta: string, respuesta: string}>  $historial
+     *
      * @throws ServicioIaNoDisponible
      */
-    public function consultar(string $pregunta, ?Mascota $mascota = null): RespuestaIa
+    public function consultar(string $pregunta, ?Mascota $mascota = null, array $historial = []): RespuestaIa
     {
         $clave = config('services.groq.key');
 
@@ -58,7 +61,7 @@ class GroqService
                 ->connectTimeout(5)
                 ->timeout(config('services.groq.timeout'))
                 ->retry([500, 1500], 0, fn (Throwable $error): bool => $this->esErrorTemporal($error))
-                ->post(config('services.groq.url'), $this->cuerpoDeLaSolicitud($pregunta, $mascota));
+                ->post(config('services.groq.url'), $this->cuerpoDeLaSolicitud($pregunta, $mascota, $historial));
         } catch (ConnectionException $error) {
             $this->registrarError('No se pudo conectar con Groq.', ['error' => $error->getMessage()]);
 
@@ -78,18 +81,25 @@ class GroqService
     /**
      * Arma el cuerpo de la solicitud para el endpoint de chat completions.
      *
+     * @param  list<array{pregunta: string, respuesta: string}>  $historial
      * @return array<string, mixed>
      */
-    private function cuerpoDeLaSolicitud(string $pregunta, ?Mascota $mascota): array
+    private function cuerpoDeLaSolicitud(string $pregunta, ?Mascota $mascota, array $historial): array
     {
+        $mensajes = [['role' => 'system', 'content' => self::PROMPT_SISTEMA]];
+
+        foreach ($historial as $consulta) {
+            $mensajes[] = ['role' => 'user', 'content' => $consulta['pregunta']];
+            $mensajes[] = ['role' => 'assistant', 'content' => $consulta['respuesta']];
+        }
+
+        $mensajes[] = ['role' => 'user', 'content' => $this->mensajeDelUsuario($pregunta, $mascota)];
+
         return [
             'model' => config('services.groq.model'),
             'temperature' => 0.3,
             'max_completion_tokens' => 2048,
-            'messages' => [
-                ['role' => 'system', 'content' => self::PROMPT_SISTEMA],
-                ['role' => 'user', 'content' => $this->mensajeDelUsuario($pregunta, $mascota)],
-            ],
+            'messages' => $mensajes,
             'response_format' => [
                 'type' => 'json_schema',
                 'json_schema' => [

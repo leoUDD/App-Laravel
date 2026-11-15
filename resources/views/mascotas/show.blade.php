@@ -16,6 +16,10 @@
 
         <x-tarjeta-mascota :mascota="$mascota" :enlazar="false" titulo="h2" />
 
+        <a href="{{ route('mascotas.bitacora.index', $mascota) }}" class="pc-boton pc-boton--secundario">
+            <x-icono nombre="reloj" :tamano="20" /> Abrir bitácora
+        </a>
+
         <x-tarjeta-asistente :mascota="$mascota" />
     </div>
 @endsection
